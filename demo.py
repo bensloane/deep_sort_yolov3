@@ -36,7 +36,11 @@ def main(yolo):
 
     writeVideo_flag = True 
     
-    video_capture = cv2.VideoCapture(0)
+    # This uses a webcam 
+    # video_capture = cv2.VideoCapture(0)
+
+    # This uses a video file
+    video_capture = cv2.VideoCapture('/data/ben-data/videos/breakroom.mp4')
 
     if writeVideo_flag:
     # Define the codec and create VideoWriter object
@@ -48,7 +52,8 @@ def main(yolo):
         frame_index = -1 
         
     fps = 0.0
-    while True:
+    # while True:
+    while cap.isOpened():
         ret, frame = video_capture.read()  # frame shape 640*480*3
         if ret != True:
             break;
@@ -83,7 +88,8 @@ def main(yolo):
             bbox = det.to_tlbr()
             cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 2)
             
-        cv2.imshow('', frame)
+        # If you want to see the image
+        # cv2.imshow('', frame)
         
         if writeVideo_flag:
             # save a frame
@@ -99,8 +105,8 @@ def main(yolo):
         print("fps= %f"%(fps))
         
         # Press Q to stop!
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
 
     video_capture.release()
     if writeVideo_flag:
