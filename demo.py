@@ -12,7 +12,7 @@ import numpy as np
 from PIL import Image
 
 # Using keras-yolo3 for detection
-from tiny-yolo.py import YOLO
+from tiny_yolo.py import YOLO
 
 from deep_sort import preprocessing
 from deep_sort import nn_matching
