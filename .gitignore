@@ -1,0 +1,15 @@
+# Weights directory   
+weights               
+                      
+# Keras weights       
+*.h5                  
+                      
+# pyc                 
+*__pycache__*         
+*.pyc                 
+                      
+# Notebooks... for now
+*.ipynb               
+                      
+# Output video        
+*.avi                 
