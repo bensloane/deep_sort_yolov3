@@ -166,7 +166,7 @@ class YOLO(object):
     #     print(end - start)
     #     return image
     def detect_image(self, image):
-        if self.is_fixed_size:
+        if self.model_image_size != (None, None):
             assert self.model_image_size[0]%32 == 0, 'Multiples of 32 required'
             assert self.model_image_size[1]%32 == 0, 'Multiples of 32 required'
             boxed_image = letterbox_image(image, tuple(reversed(self.model_image_size)))
