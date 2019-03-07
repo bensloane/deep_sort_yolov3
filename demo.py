@@ -7,11 +7,12 @@ import os
 from timeit import time
 import warnings
 import sys
+
 import cv2
 import numpy as np
 from PIL import Image
 from yolo import YOLO
-
+import argparse
 from deep_sort import preprocessing
 from deep_sort import nn_matching
 from deep_sort.detection import Detection
@@ -21,6 +22,25 @@ from deep_sort.detection import Detection as ddet
 warnings.filterwarnings('ignore')
 
 def main(yolo):
+    # CLI arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-d", "--detection_model", type="str", required=False, default="yolo.h5",
+        help="Name of the detection model to use. Expects an h5 file in model_data directory.")
+    ap.add_argument("-i", "--input_file", type="str", required=False, default=None, 
+        help="Path to a video file to use as input inplace of a webcam. If none given uses webcam.")
+    ap.add_argument("-o", "--output_file", type="str", required=False, default=None, 
+        help="Name of the output video file to  save after running detection and tracking. \
+        If None then no video is written.")
+    ap.add_argument("-c", "--confidence_threshold", type=float, required=False, default=0.5, 
+        help="Confidence threshold for detection results. Higher confidence filters out low \
+        probability detection results")
+    ap.add_argument("-s", "--skip_frames", type=int, required=False, default=None, 
+        help="Specifies the number of frames to skip until running detection. The higher the number \
+        the more frames that will be skipped and thus less time spent running inference.")   
+    ap.add_argument("-fps", "--fps", type=int, required=False, default=15, 
+        help="Specifies the frames per second to use for writing to output video. By default uses 15 \
+        You can find the fps of the video capture using cv2.VideoCapture(...).get(CAP_PROP_FPS)")
+    args = vars(ap.pars_args())
 
    # Definition of the parameters
     max_cosine_distance = 0.3
@@ -33,17 +53,24 @@ def main(yolo):
     
     metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
     tracker = Tracker(metric)
-
-    writeVideo_flag = True 
     
-    video_capture = cv2.VideoCapture(0)
+    # Save output to video file
+    writeVideo_flag = False
+    if args["output_file"]:
+        writeVideo_flag = True
+
+    # Use a file instead of webcam as input
+    if args["input_file"]:
+        video_capture = cv2.VideoCapture(args["input_file"])
+    else:
+        video_capture = cv2.VideoCapture(0)
 
     if writeVideo_flag:
     # Define the codec and create VideoWriter object
         w = int(video_capture.get(3))
         h = int(video_capture.get(4))
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-        out = cv2.VideoWriter('output.avi', fourcc, 15, (w, h))
+        out = cv2.VideoWriter(args["output_file"], fourcc, args["fps"], (w, h))
         list_file = open('detection.txt', 'w')
         frame_index = -1 
         
