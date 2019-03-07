@@ -33,21 +33,22 @@ def main(yolo):
         If None then no video is written.")
     ap.add_argument("-c", "--confidence_threshold", type=float, required=False, default=0.5, 
         help="Confidence threshold for detection results. Higher confidence filters out low \
-        probability detection results")
-    ap.add_argument("-s", "--skip_frames", type=int, required=False, default=None, 
-        help="Specifies the number of frames to skip until running detection. The higher the number \
-        the more frames that will be skipped and thus less time spent running inference.")   
+        probability detection results")   
     ap.add_argument("-fps", "--fps", type=int, required=False, default=15, 
         help="Specifies the frames per second to use for writing to output video. By default uses 15 \
         You can find the fps of the video capture using cv2.VideoCapture(...).get(CAP_PROP_FPS)")
+    # TODO: Optionally control how often detection is run 
+    # ap.add_argument("-s", "--skip_frames", type=int, required=False, default=None, 
+    #     help="Specifies the number of frames to skip until running detection. The higher the number \
+    #     the more frames that will be skipped and thus less time spent running inference.")
     args = vars(ap.pars_args())
 
-   # Definition of the parameters
+    # Definition of the parameters
     max_cosine_distance = 0.3
     nn_budget = None
     nms_max_overlap = 1.0
     
-   # deep_sort 
+    # deep_sort 
     model_filename = 'model_data/mars-small128.pb'
     encoder = gdet.create_box_encoder(model_filename,batch_size=1)
     
