@@ -29,12 +29,12 @@ def main(yolo):
 
     ap.add_argument(
         "--model", type="str", required=True,
-        help="path to model weight file, default " + YOLO.model_path
+        help="path to model weight file, default " + yolo.model_path
     )
 
     ap.add_argument(
         "--anchors", type="str", required=True,
-       help="path to anchor definitions, default " + YOLO.anchors_path
+       help="path to anchor definitions, default " + yolo.anchors_path
     )
 
     ap.add_argument(
@@ -76,7 +76,20 @@ def main(yolo):
     max_cosine_distance = 0.3
     nn_budget = None
     nms_max_overlap = 1.0
-    
+ 
+    # Set the yolo attributes
+    if args["model"]:
+        yolo.model = args["model"]
+
+    if args["anchors"]:
+        yolo.anchors_path = args["anchors"]
+
+    if args["detection_threshold"]:
+        yolo.score = args["detection_threshold"]:
+
+    if args["iou_threshold"]:
+        yolo.iou = args["iou_threshold"]:
+
     # deep_sort 
     model_filename = 'model_data/mars-small128.pb'
     encoder = gdet.create_box_encoder(model_filename,batch_size=1)
@@ -111,10 +124,7 @@ def main(yolo):
             break;
         t1 = time.time()
 
-        image = Image.fromarray(frame)
-
-        yolo
-
+        image = Image.fromarray(frame
 
         boxs = yolo.detect_image(image)
        # print("box_num",len(boxs))
