@@ -20,8 +20,8 @@ from keras.utils import multi_gpu_model
 
 class YOLO(object):
     _defaults = {
-        "model_path": 'model_data/yolo.h5',
-        "anchors_path": 'model_data/yolo_anchors.txt',
+        "model_path": 'model_data/tiny-yolov3.h5',
+        "anchors_path": 'model_data/tiny_yolo_anchors.txt',
         "classes_path": 'model_data/coco_classes.txt',
         "score" : 0.3,
         "iou" : 0.45,
@@ -126,7 +126,7 @@ class YOLO(object):
 
         print('Found {} boxes for {}'.format(len(out_boxes), 'img'))
 
-        font = ImageFont.truetype(font='font/FiraMono-Medium.otf',
+        font = ImageFont.truetype(font='/data/ben-data/git-repositories/keras-yolo3/font/FiraMono-Medium.otf',
                     size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
         thickness = (image.size[0] + image.size[1]) // 300
 

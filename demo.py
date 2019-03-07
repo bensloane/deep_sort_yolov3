@@ -55,7 +55,7 @@ def main(yolo):
         
     fps = 0.0
     # while True:
-    while cap.isOpened():
+    while video_capture.isOpened():
         ret, frame = video_capture.read()  # frame shape 640*480*3
         if ret != True:
             break;
