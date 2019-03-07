@@ -28,12 +28,12 @@ def main(yolo):
     ap = argparse.ArgumentParser()
 
     ap.add_argument(
-        "--model", type="str", required=True,
+        "--model", type="str", required=False,
         help="path to model weight file, default " + yolo.model_path
     )
 
     ap.add_argument(
-        "--anchors", type="str", required=True,
+        "--anchors", type="str", required=False,
        help="path to anchor definitions, default " + yolo.anchors_path
     )
 
@@ -124,13 +124,11 @@ def main(yolo):
             break;
         t1 = time.time()
 
-        image = Image.fromarray(frame
-
+        image = Image.fromarray(frame)
         boxs = yolo.detect_image(image)
-       # print("box_num",len(boxs))
         features = encoder(frame,boxs)
         
-        # score to 1.0 here).
+        # score to 1.0 here.
         detections = [Detection(bbox, 1.0, feature) for bbox, feature in zip(boxs, features)]
         
         # Run non-maxima suppression.
